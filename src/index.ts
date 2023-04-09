@@ -2,6 +2,10 @@ import fastify from 'fastify'
 import autoload from '@fastify/autoload'
 import path from 'path'
 
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+}
+
 const server = fastify({logger: true})
 
 server.register(autoload, {
@@ -10,7 +14,8 @@ server.register(autoload, {
 
 server.register(autoload, {
     dir: path.join(__dirname, 'routes'),
-    routeParams: true
+    dirNameRoutePrefix: true,
+    maxDepth: 2
 })
 
 server.get('/ping', async (request, reply) => {

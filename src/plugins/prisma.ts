@@ -14,6 +14,8 @@ const prismaPlugin: FastifyPluginAsync = fp(async (server, options) => {
 
   await prisma.$connect()
 
+  server.decorate('prisma', prisma)
+
   server.addHook('onClose', async (server) => {
     await server.prisma.$disconnect()
   })
