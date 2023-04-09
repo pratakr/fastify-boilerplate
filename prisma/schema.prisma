@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model genetics {
+  id               Int
+  code             String? @db.VarChar(100)
+  name             String? @db.VarChar(100)
+  genetic          String? @db.VarChar(100)
+  parent           String? @db.VarChar(100)
+  expected_product Float?
+  image            String? @db.VarChar(200)
+  image2           String? @db.VarChar(200)
+  temperature      Int?
+  himidity         Int?
+  thc              Int?
+  cbd              Int?
+  smell_favor      String? @db.VarChar(500)
+  effect           String? @db.VarChar(500)
+  height           Int?
+  age              Int
+
+  @@id([age, id])
+}
+
+model house_logs {
+  id              Int       @id @default(autoincrement())
+  house_id        Int?
+  light_start     DateTime? @db.Timestamp(0)
+  light_stop      DateTime? @db.Timestamp(0)
+  co2             Float?
+  temperature     Float?
+  humidity        Float?
+  light_intensity Float?
+  water_ph        Float?
+  water1_rate     Float?
+  water1_start    DateTime? @db.Timestamp(0)
+  water1_stop     DateTime? @db.Timestamp(0)
+  water2_rate     Float?
+  water2_start    DateTime? @db.Timestamp(0)
+  water2_stop     DateTime? @db.Timestamp(0)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+}
+
+model houses {
+  id          Int           @id
+  code        String?       @db.VarChar(100)
+  name        String?       @db.VarChar(100)
+  plant_total Int?
+  temperature Float?
+  humidity    Float?
+  light       houses_light?
+  created_at  DateTime?     @default(now()) @db.Timestamp(0)
+  updated_at  DateTime?     @db.Timestamp(0)
+  deleted_at  DateTime?     @db.Timestamp(0)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model nutrition_logs {
+  id           Int     @id @default(autoincrement())
+  house_log_id Int?
+  nutition_id  String? @db.VarChar(100)
+  amount       Float?
+}
+
+model nutritions {
+  id          Int       @id
+  name        String?   @db.VarChar(100)
+  brand       String?   @db.VarChar(100)
+  description String?   @db.VarChar(100)
+  image       String?   @db.VarChar(100)
+  nitrogent   Int?
+  phosphase   Int?
+  potash      Int?
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  deleted_at  DateTime? @db.Timestamp(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model nutritions_formular {
+  id            Int?
+  nutritions_id Int?
+  dose          Float?
+
+  @@ignore
+}
+
+model password_resets {
+  email      String    @id @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+}
+
+model personal_access_tokens {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  tokenable_type String    @db.VarChar(255)
+  tokenable_id   BigInt    @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  token          String    @unique(map: "personal_access_tokens_token_unique") @db.VarChar(64)
+  abilities      String?   @db.Text
+  last_used_at   DateTime? @db.Timestamp(0)
+  expires_at     DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+
+  @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+model plant_logs {
+  id              Int       @id @default(autoincrement())
+  plant_id        Int?
+  shelf_id        Int?
+  house_id        Int?
+  temperature     Int?
+  humidity        String?   @db.VarChar(100)
+  co2             Float?
+  light_start     DateTime? @db.Timestamp(0)
+  light_stop      DateTime? @db.Timestamp(0)
+  light_intensity Float?
+  water_ph        String?   @db.VarChar(100)
+  water1_rate     Float?
+  water1_start    DateTime? @db.Timestamp(0)
+  water1_stop     DateTime? @db.Timestamp(0)
+  water2_rate     Float?
+  water2_start    Float?
+  water2_stop     Float?
+  status          String?   @db.VarChar(100)
+  problem         String?   @db.VarChar(500)
+  action          String?   @db.VarChar(500)
+  images          String?   @db.VarChar(100)
+  age             Int?
+  created_by      Int?
+  updated_by      Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+  deleted_at      DateTime? @db.Timestamp(0)
+}
+
+model plants {
+  id             Int                    @id @default(autoincrement())
+  code           String?                @db.VarChar(100)
+  genetic_id     Int?
+  shelf_id       Int?
+  type_of_growth plants_type_of_growth?
+  height         Int?
+  growth_date    DateTime?              @db.Timestamp(0)
+  image1         String?                @db.VarChar(200)
+  image2         String?                @db.VarChar(200)
+  status         String?                @db.VarChar(100)
+  created_by     Int?
+  updated_by     Int?
+  created_at     DateTime?              @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?              @db.Timestamp(0)
+  deleted_at     DateTime?              @db.Timestamp(0)
+}
+
+model shelfs_nouse {
+  id          Int       @id @default(autoincrement())
+  house_id    Int?
+  code        String?   @db.VarChar(100)
+  name        String?   @db.VarChar(100)
+  plant_total Int?
+  capacity    Int?
+  height      Float?
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model shelves {
+  id          Int       @id @default(autoincrement())
+  house_id    Int?
+  code        String?   @db.VarChar(100)
+  name        String?   @db.VarChar(100)
+  plant_total Int?
+  capacity    Int?
+  height      Float?
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model users {
+  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String    @db.VarChar(255)
+  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
+  email_verified_at DateTime? @db.Timestamp(0)
+  password          String    @db.VarChar(255)
+  remember_token    String?   @db.VarChar(100)
+  is_active         Int?
+  role_id           Int?
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+  deleted_at        DateTime? @db.Timestamp(0)
+}
+
+enum plants_type_of_growth {
+  foto
+  auto
+}
+
+enum houses_light {
+  on
+  off
+  partial
+}
