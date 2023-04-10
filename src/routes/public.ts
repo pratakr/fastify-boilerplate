@@ -14,7 +14,7 @@ export default async function(server: any, opts: any, next: any) {
             reply.code(401)
             return {message: "Invalid credentials"}
         }else{
-            let token = await server.jwt.sign({id: user.id})
+            let token = await server.jwt.sign({id: user.id, email: user.email, role_id: user.role_id})
             return {token: token}
         }
     })

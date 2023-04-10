@@ -133,8 +133,8 @@ model plant_logs {
   plant_id        Int?
   shelf_id        Int?
   house_id        Int?
-  temperature     Int?
-  humidity        String?   @db.VarChar(100)
+  temperature     Float?
+  humidity        Float?
   co2             Float?
   light_start     DateTime? @db.Timestamp(0)
   light_stop      DateTime? @db.Timestamp(0)
